@@ -7,9 +7,9 @@ import router from '../../router'
 
 Vue.use(Vuex)
 
-const dosen = {
+const mahasiswa = {
 state : {
-  dosens : null,
+  mahasiswas : null,
   pagination  : {
     current_page  : null,
     last_page_url  : null,
@@ -20,12 +20,10 @@ state : {
     path  : null
   },
   user : {
-    name: null,
-    userId  : null
-  },
-  matkul : {
     name  : null,
-    userId : null,
+    email : "",
+    password  : "",
+    password_confirmation : "",
   },
   error : {
     name  : null,
@@ -37,8 +35,8 @@ state : {
   display : 'none'
  },
 mutations: {
-  storeDsn(state, data){
-   state.dosens = data.dosen
+  storeMhs(state, data){
+   state.mahasiswas = data.mahasiswa
    //pagination
    state.pagination.current_page = data.current_page,
    state.pagination.last_page_url= data.last_page_url,
@@ -57,8 +55,8 @@ mutations: {
    state.error.password  = null
    state.error.password_confirmation  = null
   },
-  getDsn(state, data){
-    state.dosens = data.dosen
+  getMhs(state, data){
+    state.mahasiswas = data.mahasiswa
     //pagination
     state.pagination.current_page = data.current_page,
     state.pagination.last_page_url= data.last_page_url,
@@ -66,8 +64,7 @@ mutations: {
     state.pagination.prev_page_url= data.prev_page_url,
     state.pagination.last_page    = data.last_page,
     state.pagination.per_page     = data.per_page,
-    state.pagination.path         = data.path,
-    state.display                 = 'none'
+    state.pagination.path         = data.path
    },
   error(state,errors){
     state.error.email = errors.name,
@@ -78,7 +75,7 @@ mutations: {
   show(state,data){
     state.display  = data.display
   },
-  dsnuser(state){
+  mhsuser(state){
     state.user.name = null
     state.user.email = null
     state.user.password = null
@@ -87,49 +84,18 @@ mutations: {
     state.error.email  = null
     state.error.password  = null
     state.error.password_confirmation  = null
-  },
-  getDsnAll(state,data){
-    state.dosens  = data.dosen
   }
  },
 actions : {
- dsnGet({state,commit},param){
-  const token = localStorage.getItem('token')
-  const url = param || '/api/dsn'
-  axios({
-    url     : url,
-    method  : 'GET',
-    headers : {
-        'Content-Type'  : 'application/json',
-        'Accept'        : 'application/json',
-        Authorization   : 'Bearer '+token
-    }
-  })
-  .then((res) =>{      
-      commit('getDsn',{
-        dosen: res.data.data,
-        //pagination
-        current_page    : res.data.current_page,
-        last_page_url   : res.data.last_page_url,
-        next_page_url   : res.data.next_page_url,
-        prev_page_url   : res.data.prev_page_url,
-        last_page       : res.data.last_page,
-        per_page        : res.data.per_page,
-        path            : res.data.path,
-      })
-  }).catch(error => {
-     console.log(error);
-  })
-  },
-  dsndisplay({commit},param){
+  display({commit},param){
     commit('show',{
       display : param,
     })
   },
-  dsnDelete({commit,dispatch},dsnId){
+  mhsDelete({commit,dispatch},mhsId){
     const token = localStorage.getItem('token')
         axios({
-            url     : '/api/user/'+dsnId,
+            url     : '/api/user/'+mhsId,
             method  : 'delete',
             headers : {
                 'Content-Type'  : 'application/json',
@@ -137,11 +103,11 @@ actions : {
                 Authorization   : 'Bearer '+token
         }
         }).then((res) => {
-          dispatch('dsnGet')
+          dispatch('mhsGet')
         })
   },
-  dsnResetForm({commit}){
-    commit('dsnuser',{
+  mhsResetForm({commit}){
+    commit('mhsuser',{
       name : null,
       email : null,
       password : null,
@@ -152,9 +118,35 @@ actions : {
       password_confirmation  : null
     })
   },
-  dsnStore({state,commit},param){
-   const token = localStorage.getItem('token')
-
+  mhsGet({state,commit},param){
+    const token = localStorage.getItem('token')
+    const url = param || '/api/mhs'
+    axios({
+      url     : url,
+      method  : 'GET',
+      headers : {
+          'Content-Type'  : 'application/json',
+          'Accept'        : 'application/json',
+          Authorization   : 'Bearer '+token
+      }
+    })
+    .then((res) =>{      
+        commit('getMhs',{
+          mahasiswa: res.data.data,
+          //pagination
+          current_page    : res.data.current_page,
+          last_page_url   : res.data.last_page_url,
+          next_page_url   : res.data.next_page_url,
+          prev_page_url   : res.data.prev_page_url,
+          last_page       : res.data.last_page,
+          per_page        : res.data.per_page,
+          path            : res.data.path,
+        })
+    }).catch(error => {
+            console.log(error);
+    })
+    },
+  mhsStore({state,commit},param){
     axios({
       url     : '/api/auth/register',
       method  : 'POST',
@@ -163,15 +155,14 @@ actions : {
           email                   : param.email,
           password                : param.password,
           password_confirmation   : param.password_confirmation,
-          role                    : 2
+          role                    : 1
           },
           headers : {
               'Content-Type'  : 'application/json',
               'Accept'        : 'application/json',
-              Authorization   : 'Bearer '+token
           }
       }).then((res) =>{
-        commit('storeDsn',{
+        commit('storeMhs',{
           mahasiswa: res.data.data,
           //pagination
           current_page    : res.data.current_page,
@@ -193,43 +184,24 @@ actions : {
           })
     })
   },
-  adminDosenAll({state,commit}){    
-    const token = localStorage.getItem('token')
-    axios({
-      url     : '/api/dosenall',
-      method  : 'GET',
-      headers : {
-          'Content-Type'  : 'application/json',
-          'Accept'        : 'application/json',
-          Authorization   : 'Bearer '+token
-      }
-    })
-    .then((res) =>{            
-        commit('getDsnAll',{
-          dosen: res.data,
-        })        
-    }).catch(error => {
-       console.log(error);
-    })
-  }
 },
 getters : {
-  dsnGetDsn(state) {
-   return state.dosens
+  mhsGetMhs(state) {
+   return state.mahasiswas
   },
-  dsnpagination(state){
+  mhspagination(state){
     return state.pagination
   },
-  dsnerror(state){
+  mhserror(state){
     return state.error
   },
-  dsndisplay(state){
+  display(state){
     return state.display
   },
-  dsnuser(state){
+  mhsuser(state){
     return state.user
   }
  },
 }
 
-export default dosen
+export default mahasiswa

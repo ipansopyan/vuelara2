@@ -86,7 +86,20 @@ class DosenController extends Controller
         ->select('presents.*','users.name','matkuls.name_matkul')
         ->where('mtkl_id',$mtkl_id)
         ->orderBy('id','desc')
-        ->paginate(10);
+        ->paginate(1);
         return $presents;
+    }
+    public function dosens()
+    {
+        $dsn = User::where('role',2)
+        ->orderBy('id','desc')
+        ->paginate(5);
+        return $dsn;
+    }
+    public function dosenall()
+    {
+        $dsnall = User::where('role',2)
+        ->orderBy('id','desc')->get();
+        return $dsnall;
     }
 }

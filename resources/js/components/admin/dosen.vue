@@ -13,7 +13,7 @@
          <div class="modal-dialog">
              <div class="modal-content">
                  <div class="modal-header">
-                     <h5 class="modal-title">Data Mahasiswa</h5>
+                     <h5 class="modal-title">Data Dosen</h5>
                      <button @click.prevent="close"  type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
                  </div>
                  <form class="was-validated" @submit.prevent="onSubmit" method="post">
@@ -54,23 +54,23 @@
                    <th>opsi</th>
                </tr>
            </thead>
-            <tbody v-for="(mahasiswa, index) in mahasiswas" :key="mahasiswa.id">
+            <tbody v-for="(dosen, index) in dosens" :key="dosen.id">
               <td>{{index+1}}</td>
-              <td>{{mahasiswa.name}}</td>
-              <td>{{mahasiswa.email}}</td>
-              <td><a href="javascript:void(0)" @click.prevent="onDelete(mahasiswa.id)" class="text-danger"><i class="ti-trash"></i></a></td>
+              <td>{{dosen.name}}</td>
+              <td>{{dosen.email}}</td>
+              <td><a href="javascript:void(0)" @click.prevent="onDelete(dosen.id)" class="text-danger"><i class="ti-trash"></i></a></td>
             </tbody>
        </table>
        <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-end">
             <li class="page-item" v-bind:class="[{disabled : !pagination.prev_page_url}]" >
-                <a class="page-link" href="javascript:void(0)" @click.prevent="getmhs(pagination.prev_page_url)" >Previous</a>
+                <a class="page-link" href="javascript:void(0)" @click.prevent="getdsn(pagination.prev_page_url)" >Previous</a>
             </li>
             <li class="page-item"><a class="page-link" href="javascript:void(0)">
                     {{pagination.current_page}} of {{pagination.last_page}}
                 </a></li>
             <li class="page-item " v-bind:class="[{disabled : !pagination.next_page_url}]" >
-                <a class="page-link" href="javascript:void(0)" @click.prevent="getmhs(pagination.next_page_url)">Next</a>
+                <a class="page-link" href="javascript:void(0)" @click.prevent="getdsn(pagination.next_page_url)">Next</a>
             </li>
         </ul>
       </nav>
@@ -92,46 +92,45 @@ export default {
   },
   methods: {
     showModal() {
-      this.$store.dispatch('display','block')
+      this.$store.dispatch('dsndisplay','block')
     },
     close() {
-      this.$store.dispatch('display','none')
-      this.$store.dispatch('mhsResetForm')
+      this.$store.dispatch('dsndisplay','none')
+      this.$store.dispatch('dsnResetForm')
     },
     onSubmit(){
-      this.$store.dispatch('mhsStore',this.user)
-      this.getmhs()
+      this.$store.dispatch('dsnStore',this.user)
+      this.getdsn()
     },
-    onDelete(mhsId){
+    onDelete(dsnId){
       let decision = confirm('Are you sure?');
-          if (decision == true) {
-
-      this.$store.dispatch('mhsDelete',mhsId)
-          }
+      if (decision == true) {
+        this.$store.dispatch('dsnDelete',dsnId)
+      }
     },
-    getmhs(param){
-      this.$store.dispatch('mhsGet',param)
+    getdsn(param){
+      this.$store.dispatch('dsnGet',param)
     }
   },
   computed: {
-    mahasiswas() {
-      return this.$store.getters.mhsGetMhs
+    dosens() {
+      return this.$store.getters.dsnGetDsn
     },
     pagination() {
-      return this.$store.getters.mhspagination
+      return this.$store.getters.dsnpagination
     },
     error(){
-      return this.$store.getters.mhserror
+      return this.$store.getters.dsnerror
     },
     display(){
-      return this.$store.getters.display
+      return this.$store.getters.dsndisplay
     },
     user(){
-      return this.$store.getters.mhsuser
+      return this.$store.getters.dsnuser
     }
   },
   mounted() {
-    this.$store.dispatch('mhsGet')
+    this.$store.dispatch('dsnGet')    
   }
 }
 </script>

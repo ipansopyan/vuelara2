@@ -9,5 +9,6 @@ new Vue({
     el: '#app',
     router,
     store,
+    axios,
     render: h => h(App)
 });

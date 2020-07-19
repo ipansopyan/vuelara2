@@ -7,8 +7,11 @@ import WelcomePage from './components/welcome/welcome'
 import LoginPage from './components/auth/signin'
 import RegisterPage from './components/auth/signup'
 import DashboardDosen from './components/dashboard/dashboard'
-import DashboardAdmin from './components/admin/dashboard'
-import MahasiswaAdmin from './components/admin/mahasiswa'
+import Admin from './components/admin/admin'
+import Dashboard from './components/admin/dashboard'
+import AdminMahasiswa from './components/admin/mahasiswa'
+import AdminDosen from './components/admin/dosen'
+import AdminMatkul from './components/admin/matkul'
 
 Vue.use(Vuerouter)
 
@@ -40,14 +43,28 @@ const routes = [
  },
  {
   path : '/admin',
-  name : 'admin',
-  component: DashboardAdmin,
+  component: Admin,
   children :  
   [{
-   path : '/mahasiswa',
-   name : 'mahasiswa',
-   component : MahasiswaAdmin
-  }],
+   path : '',
+   name : 'dashboard',
+   component : Dashboard
+  },
+  {
+    path : '/admin/mahasiwa',
+    name : 'admin/mahasiswa',
+    component : AdminMahasiswa
+   },
+   {
+    path : '/admin/dosen',
+    name : 'admin/dosen',
+    component : AdminDosen
+   },
+   {
+    path : '/admin/matkul',
+    name : 'admin/matkul',
+    component : AdminMatkul
+   }],
   beforeEnter(to,from,next) {
    if (localStorage.getItem('userId') == 3) 
     next()

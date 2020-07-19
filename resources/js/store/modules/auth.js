@@ -48,7 +48,7 @@ const auth = {
     localStorage.setItem('expirationDate', expirationDate)
     
     if (state.role == 3) {
-    router.push({name : 'admin'})
+    router.push({path : '/admin'})
     } else if (state.role == 2) {
      router.push({name : 'dosen'})
     }

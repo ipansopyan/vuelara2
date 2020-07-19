@@ -13,7 +13,7 @@
             <nav>
                 <ul class="metismenu" id="menu">
                     <li>
-                        <router-link :to="{name:'admin'}"><i class="ti-dashboard"></i><span>Dashboard</span></router-link>
+                        <router-link :to="{name:'dosen'}"><i class="ti-dashboard"></i><span>Dashboard</span></router-link>
                     </li>
                 </ul>
             </nav>
@@ -100,16 +100,16 @@
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="header-title">Show</h4>
-                                <form class="was-validated" method="POST" @submit.prevent="gqr">
+                                <form class="was-validated">
                             <div class="form-group">
                             <label class="col-form-label"></label>
-                            <select class="custom-select" required>
+                            <select v-model="presentId" class="custom-select" required>
                                 <option value="">--Select Matkul--</option>
                                 <option v-for="matkul in matkuls" :key="matkul.id" :value="matkul.id" >{{matkul.name_matkul}}</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <button @click.prevent="showPresent" type="button" class="pull-right btn btn-primary" data-dismiss="modal">Show</button>
+                            <button @click.prevent="showPresent()" type="button" class="pull-right btn btn-primary" data-dismiss="modal">Show</button>
                         </div>
                     </form>
                             </div>
@@ -120,7 +120,7 @@
                     <div v-bind:style="{display: displayp }" class="col-12 mt-5">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="header-title">Progress Table</h4>
+                                <h4 class="header-title">Progress </h4>
                                 <div class="single-table">
                                     <div class="table-responsive">
                                         <table class="table table-hover progress-table text-center">
@@ -147,8 +147,73 @@
                                                     <th scope="col">16</th>
                                                 </tr>
                                             </thead>
+                                            <tbody v-for="(present, index) in presents" :key="present.id">
+                                                <td>{{index+1}}</td>
+                                                <td>{{present.name}}</td>
+                                                <td>{{present.name_matkul}}</td>
+                                                <td v-if="present.prt1">
+                                                    <span class="ti-check"></span>
+                                                </td><td v-else></td>
+                                                <td v-if="present.prt2">
+                                                    <span class="ti-check"></span>
+                                                </td><td v-else></td>
+                                                <td v-if="present.prt3">
+                                                    <span class="ti-check"></span>
+                                                </td><td v-else></td>
+                                                <td v-if="present.prt4">
+                                                    <span class="ti-check"></span>
+                                                </td><td v-else></td>
+                                                <td v-if="present.prt5">
+                                                    <span class="ti-check"></span>
+                                                </td><td v-else></td>
+                                                <td v-if="present.prt6">
+                                                    <span class="ti-check"></span>
+                                                </td><td v-else></td>
+                                                <td v-if="present.prt7">
+                                                    <span class="ti-check"></span>
+                                                </td><td v-else></td>
+                                                <td v-if="present.prt8">
+                                                    <span class="ti-check"></span>
+                                                </td><td v-else></td>
+                                                <td v-if="present.prt9">
+                                                    <span class="ti-check"></span>
+                                                </td><td v-else></td>
+                                                <td v-if="present.prt10">
+                                                    <span class="ti-check"></span>
+                                                </td><td v-else></td>
+                                                <td v-if="present.prt11">
+                                                    <span class="ti-check"></span>
+                                                </td><td v-else></td>
+                                                <td v-if="present.prt12">
+                                                    <span class="ti-check"></span>
+                                                </td><td v-else></td>
+                                                <td v-if="present.prt13">
+                                                    <span class="ti-check"></span>
+                                                </td><td v-else></td>
+                                                <td v-if="present.prt14">
+                                                    <span class="ti-check"></span>
+                                                </td><td v-else></td>
+                                                <td v-if="present.prt15">
+                                                    <span class="ti-check"></span>
+                                                </td><td v-else></td>
+                                                <td v-if="present.prt16">
+                                                    <span class="ti-check"></span>
+                                                </td><td v-else></td>
+                                            </tbody>
                                         </table>
-                                        
+                                        <nav aria-label="Page navigation example">
+                                            <ul class="pagination justify-content-end">
+                                                <li class="page-item" v-bind:class="[{disabled : !pagination.prev_page_url}]" >
+                                                    <a class="page-link" href="javascript:void(0)" @click.prevent="showPresent(pagination.prev_page_url)" >Previous</a>
+                                                </li>
+                                                <li class="page-item"><a class="page-link" href="javascript:void(0)">
+                                                        {{pagination.current_page}} of {{pagination.last_page}}
+                                                    </a></li>
+                                                <li class="page-item " v-bind:class="[{disabled : !pagination.next_page_url}]" >
+                                                    <a class="page-link" href="javascript:void(0)" @click.prevent="showPresent(pagination.next_page_url)">Next</a>
+                                                </li>
+                                            </ul>
+                                        </nav>
                                     </div>
                                 </div>
                             </div>
@@ -171,6 +236,7 @@
 </template>
 <script>
 import QrcodeVue from 'qrcode.vue'
+import axios from 'axios'
 export default {
   data(){
     return {
@@ -181,6 +247,8 @@ export default {
       display   : 'none',
       displayp   : 'none',
       value     : "",
+      presentId   : null,
+      url   : null
     }
   },
   methods: {
@@ -195,8 +263,16 @@ export default {
         this.qr = !this.qr
     }
     },
-    showPresent(){
-        this.displayp = 'block'
+    showPresent(path){        
+        if (this.presentId != null && path == null) {
+            path = '/api/present/'+this.presentId
+            this.displayp = 'block'
+            this.$store.dispatch('dosenGetPresent',path)
+            path = null            
+        }else if (path != null) {
+            this.displayp = 'block'
+            this.$store.dispatch('dosenGetPresent',path)
+        }
     },
     closeModal() {
     this.display = 'none'
@@ -207,12 +283,18 @@ export default {
     name() {
         return this.$store.getters.name
     },
+    presents(){
+        return this.$store.getters.presents
+    },
     matkuls(){
         return this.$store.getters.dosenMatkul
     },
+    pagination(){
+        return this.$store.getters.pagination
+    }
   },
   mounted(){      
-      this.$store.dispatch('getmatkuls')
+    this.$store.dispatch('getmatkuls')
   },
   components : {
     QrcodeVue,
