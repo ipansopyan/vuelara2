@@ -5,7 +5,7 @@
   <div class="col-12 mt-5">
    <div class="card">
     <div class="card-body">
-     <h4 class="header-title">Data {{display}}</h4>
+     <h4 class="header-title">Data Mahasiswa</h4>
      <div class="d-flex justify-content-end">
          <button class="btn btn-xs btn-primary" @click.prevent="showModal">add</button>
      </div>
@@ -55,7 +55,7 @@
                </tr>
            </thead>
             <tbody v-for="(mahasiswa, index) in mahasiswas" :key="mahasiswa.id">
-              <td>{{index+1}}</td>
+              <td>{{(pagination.current_page*pagination.per_page)-pagination.per_page + index+1}}</td>
               <td>{{mahasiswa.name}}</td>
               <td>{{mahasiswa.email}}</td>
               <td><a href="javascript:void(0)" @click.prevent="onDelete(mahasiswa.id)" class="text-danger"><i class="ti-trash"></i></a></td>
@@ -93,6 +93,8 @@ export default {
   methods: {
     showModal() {
       this.$store.dispatch('display','block')
+      this.$store.dispatch('mhsResetForm')
+
     },
     close() {
       this.$store.dispatch('display','none')

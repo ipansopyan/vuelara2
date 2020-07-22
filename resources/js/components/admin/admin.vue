@@ -26,12 +26,10 @@
                     </div>
                     <div class="col-sm-6 clearfix">
                         <div class="user-profile pull-right ">
-                            <img class="avatar user-thumb" src="assets/images/author/avatar.png" alt="avatar">
-                            <h4 @click.prevent="data" class="user-name dropdown-toggle" data-toggle="dropdown" aria-expanded="true">Kumkum Rai <i class="fa fa-angle-down"></i></h4>
+                            <img class="avatar user-thumb" src="../../../../public/assets/images/author/avatar.png" alt="avatar">
+                            <h4 @click.prevent="data" class="user-name dropdown-toggle" data-toggle="dropdown" aria-expanded="true">{{name}}<i class="fa fa-angle-down"></i></h4>
                             <div class="dropdown-menu" :class="{show:show==true}" >
-                                <a class="dropdown-item" href="#">Message</a>
-                                <a class="dropdown-item" href="#">Settings</a>
-                                <a class="dropdown-item" href="#">Log Out</a>
+                                <a @click.prevent="logout" class="dropdown-item" href="javascript:void(0)">Log Out</a>
                             </div>
                         </div>
                     </div>
@@ -44,7 +42,7 @@
         <!-- footer area start-->
         <footer>
             <div class="footer-area">
-                <p>© Copyright 2018. All right reserved. Template by <a href="https://colorlib.com/wp/">Colorlib</a>.</p>
+                <p>Semoga Lebik Baik.</p>
             </div>
         </footer>
         <!-- footer area end-->
@@ -60,11 +58,17 @@ export default {
     }
   },
   methods: {
+    logout(){
+        this.$store.dispatch('logout')
+    },
     data : function() {
       this.show = !this.show
     }
   },
   computed: {
+    name() {
+        return this.$store.getters.name
+    },
   },
   components: {
       MenuAdmin

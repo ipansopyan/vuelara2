@@ -1983,8 +1983,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -1993,11 +1991,18 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    logout: function logout() {
+      this.$store.dispatch('logout');
+    },
     data: function data() {
       this.show = !this.show;
     }
   },
-  computed: {},
+  computed: {
+    name: function name() {
+      return this.$store.getters.name;
+    }
+  },
   components: {
     MenuAdmin: _menu__WEBPACK_IMPORTED_MODULE_0__["default"]
   }
@@ -2059,12 +2064,37 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {};
   },
-  mounted: function mounted() {},
-  methods: {}
+  mounted: function mounted() {
+    this.$store.dispatch("dsnGet");
+    this.$store.dispatch("mhsGet");
+    this.$store.dispatch("adminGetMatkul");
+  },
+  methods: {
+    click: function click() {
+      console.log(this.dosens);
+    }
+  },
+  computed: {
+    dosens: function dosens() {
+      return this.$store.getters.dsnpagination.total;
+    },
+    mahasiswas: function mahasiswas() {
+      return this.$store.getters.mhspagination.total;
+    },
+    matkuls: function matkuls() {
+      return this.$store.getters.matkulpagination.total;
+    }
+  }
 });
 
 /***/ }),
@@ -2315,6 +2345,7 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     showModal: function showModal() {
       this.$store.dispatch('display', 'block');
+      this.$store.dispatch('mhsResetForm');
     },
     close: function close() {
       this.$store.dispatch('display', 'none');
@@ -2553,6 +2584,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2566,7 +2606,7 @@ __webpack_require__.r(__webpack_exports__);
         email: this.email,
         password: this.password
       };
-      this.$store.dispatch('signin', {
+      this.$store.dispatch("signin", {
         email: formData.email,
         password: formData.password
       });
@@ -2652,10 +2692,7 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var qrcode_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! qrcode.vue */ "./node_modules/qrcode.vue/dist/qrcode.vue.esm.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
-//
-//
+/* harmony import */ var _axios_auth__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../axios-auth */ "./resources/js/axios-auth.js");
 //
 //
 //
@@ -2903,16 +2940,25 @@ __webpack_require__.r(__webpack_exports__);
       displayp: 'none',
       value: "",
       presentId: null,
-      url: null
+      url: null,
+      key: 0
     };
   },
   methods: {
+    logout: function logout() {
+      this.$store.dispatch('logout');
+    },
     data: function data() {
       this.show = !this.show;
     },
     gqr: function gqr() {
-      this.value = 'http://192.168.43.184:8000/api/present';
-      this.value = this.value + '?mtkl_id=' + this.matkul + '&prt=' + this.prt;
+      var _this = this;
+
+      var defaultUrl = _axios_auth__WEBPACK_IMPORTED_MODULE_1__["default"].defaults.baseURL;
+      this.value = defaultUrl + 'api/present?mtkl_id=' + this.matkul + '&prt=' + this.prt + '&key=1';
+      setTimeout(function () {
+        _this.value = defaultUrl + 'api/present?mtkl_id=' + _this.matkul + '&prt=' + _this.prt + '&key=' + _this.key;
+      }, 8000);
 
       if (this.matkul && this.prt != "") {
         this.display = 'block';
@@ -2997,6 +3043,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3010,7 +3073,7 @@ __webpack_require__.r(__webpack_exports__);
         email: this.email,
         password: this.password
       };
-      this.$store.dispatch('signin', {
+      this.$store.dispatch("signin", {
         email: formData.email,
         password: formData.password
       });
@@ -4685,7 +4748,7 @@ var render = function() {
                   _c("img", {
                     staticClass: "avatar user-thumb",
                     attrs: {
-                      src: "assets/images/author/avatar.png",
+                      src: __webpack_require__(/*! ../../../../public/assets/images/author/avatar.png */ "./public/assets/images/author/avatar.png"),
                       alt: "avatar"
                     }
                   }),
@@ -4706,7 +4769,7 @@ var render = function() {
                       }
                     },
                     [
-                      _vm._v("Kumkum Rai "),
+                      _vm._v(_vm._s(_vm.name)),
                       _c("i", { staticClass: "fa fa-angle-down" })
                     ]
                   ),
@@ -4720,19 +4783,16 @@ var render = function() {
                     [
                       _c(
                         "a",
-                        { staticClass: "dropdown-item", attrs: { href: "#" } },
-                        [_vm._v("Message")]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "a",
-                        { staticClass: "dropdown-item", attrs: { href: "#" } },
-                        [_vm._v("Settings")]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "a",
-                        { staticClass: "dropdown-item", attrs: { href: "#" } },
+                        {
+                          staticClass: "dropdown-item",
+                          attrs: { href: "javascript:void(0)" },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.logout($event)
+                            }
+                          }
+                        },
                         [_vm._v("Log Out")]
                       )
                     ]
@@ -4780,13 +4840,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("footer", [
       _c("div", { staticClass: "footer-area" }, [
-        _c("p", [
-          _vm._v("© Copyright 2018. All right reserved. Template by "),
-          _c("a", { attrs: { href: "https://colorlib.com/wp/" } }, [
-            _vm._v("Colorlib")
-          ]),
-          _vm._v(".")
-        ])
+        _c("p", [_vm._v("Semoga Lebik Baik.")])
       ])
     ])
   }
@@ -4812,91 +4866,105 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "main-content-inner" }, [
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-lg-8" }, [
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-md-6 mt-5 mb-3" }, [
+            _c("div", { staticClass: "card" }, [
+              _c("div", { staticClass: "seo-fact sbg1" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "p-4 d-flex justify-content-between align-items-center"
+                  },
+                  [
+                    _c("div", { staticClass: "seofct-icon" }, [
+                      _c("i", {
+                        staticClass: "ti-user",
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.click($event)
+                          }
+                        }
+                      }),
+                      _vm._v("Dosen\n                ")
+                    ]),
+                    _vm._v(" "),
+                    _c("h2", [_vm._v(_vm._s(_vm.dosens))])
+                  ]
+                ),
+                _vm._v(" "),
+                _c("canvas", { attrs: { id: "seolinechart1", height: "50" } })
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-md-6 mt-md-5 mb-3" }, [
+            _c("div", { staticClass: "card" }, [
+              _c("div", { staticClass: "seo-fact sbg2" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "p-4 d-flex justify-content-between align-items-center"
+                  },
+                  [
+                    _vm._m(0),
+                    _vm._v(" "),
+                    _c("h2", [_vm._v(_vm._s(_vm.mahasiswas))])
+                  ]
+                ),
+                _vm._v(" "),
+                _c("canvas", { attrs: { id: "seolinechart2", height: "50" } })
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-md-6 mt-md-5 mb-3" }, [
+            _c("div", { staticClass: "card" }, [
+              _c("div", { staticClass: "seo-fact sbg2" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "p-4 d-flex justify-content-between align-items-center"
+                  },
+                  [
+                    _vm._m(1),
+                    _vm._v(" "),
+                    _c("h2", [_vm._v(_vm._s(_vm.matkuls))])
+                  ]
+                ),
+                _vm._v(" "),
+                _c("canvas", { attrs: { id: "seolinechart2", height: "50" } })
+              ])
+            ])
+          ])
+        ])
+      ])
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "main-content-inner" }, [
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-lg-8" }, [
-          _c("div", { staticClass: "row" }, [
-            _c("div", { staticClass: "col-md-6 mt-5 mb-3" }, [
-              _c("div", { staticClass: "card" }, [
-                _c("div", { staticClass: "seo-fact sbg1" }, [
-                  _c(
-                    "div",
-                    {
-                      staticClass:
-                        "p-4 d-flex justify-content-between align-items-center"
-                    },
-                    [
-                      _c("div", { staticClass: "seofct-icon" }, [
-                        _c("i", { staticClass: "ti-user" }),
-                        _vm._v("Mahasiswa")
-                      ]),
-                      _vm._v(" "),
-                      _c("h2", [_vm._v("mhs")])
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c("canvas", { attrs: { id: "seolinechart1", height: "50" } })
-                ])
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-md-6 mt-md-5 mb-3" }, [
-              _c("div", { staticClass: "card" }, [
-                _c("div", { staticClass: "seo-fact sbg2" }, [
-                  _c(
-                    "div",
-                    {
-                      staticClass:
-                        "p-4 d-flex justify-content-between align-items-center"
-                    },
-                    [
-                      _c("div", { staticClass: "seofct-icon" }, [
-                        _c("i", { staticClass: "ti-user" }),
-                        _vm._v(" Dosen")
-                      ]),
-                      _vm._v(" "),
-                      _c("h2", [_vm._v("dsn")])
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c("canvas", { attrs: { id: "seolinechart2", height: "50" } })
-                ])
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-md-6 mt-md-5 mb-3" }, [
-              _c("div", { staticClass: "card" }, [
-                _c("div", { staticClass: "seo-fact sbg2" }, [
-                  _c(
-                    "div",
-                    {
-                      staticClass:
-                        "p-4 d-flex justify-content-between align-items-center"
-                    },
-                    [
-                      _c("div", { staticClass: "seofct-icon" }, [
-                        _c("i", { staticClass: "ti-book" }),
-                        _vm._v(" Mata Kuliah")
-                      ]),
-                      _vm._v(" "),
-                      _c("h2", [_vm._v("matkul")])
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c("canvas", { attrs: { id: "seolinechart2", height: "50" } })
-                ])
-              ])
-            ])
-          ])
-        ])
-      ])
+    return _c("div", { staticClass: "seofct-icon" }, [
+      _c("i", { staticClass: "ti-user" }),
+      _vm._v(" Mahasiswa\n                ")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "seofct-icon" }, [
+      _c("i", { staticClass: "ti-book" }),
+      _vm._v(" Mata Kuliah\n                ")
     ])
   }
 ]
@@ -4926,9 +4994,7 @@ var render = function() {
       _c("div", { staticClass: "col-12 mt-5" }, [
         _c("div", { staticClass: "card" }, [
           _c("div", { staticClass: "card-body" }, [
-            _c("h4", { staticClass: "header-title" }, [
-              _vm._v("Data " + _vm._s(_vm.display))
-            ]),
+            _c("h4", { staticClass: "header-title" }, [_vm._v("Data Dosen")]),
             _vm._v(" "),
             _c("div", { staticClass: "d-flex justify-content-end" }, [
               _c(
@@ -5189,7 +5255,17 @@ var render = function() {
                     _vm._v(" "),
                     _vm._l(_vm.dosens, function(dosen, index) {
                       return _c("tbody", { key: dosen.id }, [
-                        _c("td", [_vm._v(_vm._s(index + 1))]),
+                        _c("td", [
+                          _vm._v(
+                            _vm._s(
+                              _vm.pagination.current_page *
+                                _vm.pagination.per_page -
+                                _vm.pagination.per_page +
+                                index +
+                                1
+                            )
+                          )
+                        ]),
                         _vm._v(" "),
                         _c("td", [_vm._v(_vm._s(dosen.name))]),
                         _vm._v(" "),
@@ -5352,7 +5428,7 @@ var render = function() {
         _c("div", { staticClass: "card" }, [
           _c("div", { staticClass: "card-body" }, [
             _c("h4", { staticClass: "header-title" }, [
-              _vm._v("Data " + _vm._s(_vm.display))
+              _vm._v("Data Mahasiswa")
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "d-flex justify-content-end" }, [
@@ -5614,7 +5690,17 @@ var render = function() {
                     _vm._v(" "),
                     _vm._l(_vm.mahasiswas, function(mahasiswa, index) {
                       return _c("tbody", { key: mahasiswa.id }, [
-                        _c("td", [_vm._v(_vm._s(index + 1))]),
+                        _c("td", [
+                          _vm._v(
+                            _vm._s(
+                              _vm.pagination.current_page *
+                                _vm.pagination.per_page -
+                                _vm.pagination.per_page +
+                                index +
+                                1
+                            )
+                          )
+                        ]),
                         _vm._v(" "),
                         _c("td", [_vm._v(_vm._s(mahasiswa.name))]),
                         _vm._v(" "),
@@ -5852,6 +5938,7 @@ var render = function() {
                               ],
                               staticClass: "form-control form-control",
                               attrs: {
+                                required: "",
                                 type: "text",
                                 placeholder: "nama matakuliah"
                               },
@@ -5971,7 +6058,17 @@ var render = function() {
                     _vm._v(" "),
                     _vm._l(_vm.matkuls, function(matkul, index) {
                       return _c("tbody", { key: matkul.id }, [
-                        _c("td", [_vm._v(_vm._s(index + 1))]),
+                        _c("td", [
+                          _vm._v(
+                            _vm._s(
+                              _vm.pagination.current_page *
+                                _vm.pagination.per_page -
+                                _vm.pagination.per_page +
+                                index +
+                                1
+                            )
+                          )
+                        ]),
                         _vm._v(" "),
                         _c("td", [_vm._v(_vm._s(matkul.name_matkul))]),
                         _vm._v(" "),
@@ -6165,7 +6262,7 @@ var render = function() {
                 "router-link",
                 { attrs: { to: { name: "admin/mahasiswa" } } },
                 [
-                  _c("i", { staticClass: "ti-dashboard" }),
+                  _c("i", { staticClass: "ti-user" }),
                   _c("span", [_vm._v("Mahasiswa")])
                 ]
               )
@@ -6177,7 +6274,7 @@ var render = function() {
             "li",
             [
               _c("router-link", { attrs: { to: { name: "admin/dosen" } } }, [
-                _c("i", { staticClass: "ti-dashboard" }),
+                _c("i", { staticClass: "ti-user" }),
                 _c("span", [_vm._v("Dosen")])
               ])
             ],
@@ -6188,7 +6285,7 @@ var render = function() {
             "li",
             [
               _c("router-link", { attrs: { to: { name: "admin/matkul" } } }, [
-                _c("i", { staticClass: "ti-dashboard" }),
+                _c("i", { staticClass: "ti-book" }),
                 _c("span", [_vm._v("Mata Kuliah")])
               ])
             ],
@@ -6537,7 +6634,7 @@ var render = function() {
                 _c("img", {
                   staticClass: "avatar user-thumb",
                   attrs: {
-                    src: "assets/images/author/avatar.png",
+                    src: __webpack_require__(/*! ../../../../public/assets/images/author/avatar.png */ "./public/assets/images/author/avatar.png"),
                     alt: "avatar"
                   }
                 }),
@@ -6572,19 +6669,16 @@ var render = function() {
                   [
                     _c(
                       "a",
-                      { staticClass: "dropdown-item", attrs: { href: "#" } },
-                      [_vm._v("Message")]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "a",
-                      { staticClass: "dropdown-item", attrs: { href: "#" } },
-                      [_vm._v("Settings")]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "a",
-                      { staticClass: "dropdown-item", attrs: { href: "#" } },
+                      {
+                        staticClass: "dropdown-item",
+                        attrs: { href: "javascript:void(0)" },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.logout($event)
+                          }
+                        }
+                      },
                       [_vm._v("Log Out")]
                     )
                   ]
@@ -7192,13 +7286,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("footer", [
       _c("div", { staticClass: "footer-area" }, [
-        _c("p", [
-          _vm._v("© Copyright 2018. All right reserved. Template by "),
-          _c("a", { attrs: { href: "https://colorlib.com/wp/" } }, [
-            _vm._v("Colorlib")
-          ]),
-          _vm._v(".")
-        ])
+        _c("p", [_vm._v("Semoga Lebik Baik.")])
       ])
     ])
   }
@@ -7307,7 +7395,10 @@ var render = function() {
                     }
                   }
                 },
-                [_vm._v("Submit "), _c("i", { staticClass: "ti-arrow-right" })]
+                [
+                  _vm._v("\n              Submit\n              "),
+                  _c("i", { staticClass: "ti-arrow-right" })
+                ]
               )
             ])
           ])
@@ -23751,6 +23842,17 @@ module.exports = g;
 
 /***/ }),
 
+/***/ "./public/assets/images/author/avatar.png":
+/*!************************************************!*\
+  !*** ./public/assets/images/author/avatar.png ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/avatar.png?04fc967b70b2ea212c14f66932c52531";
+
+/***/ }),
+
 /***/ "./resources/js/app.js":
 /*!*****************************!*\
   !*** ./resources/js/app.js ***!
@@ -23797,7 +23899,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 
 var instance = axios__WEBPACK_IMPORTED_MODULE_0___default.a.create({
-  baseURL: 'http://127.0.0.1:8000/'
+  baseURL: 'http://192.168.43.184:8000/'
 });
 instance.defaults.headers.common['SOMETHING'] = 'something';
 /* harmony default export */ __webpack_exports__["default"] = (instance);
@@ -24715,12 +24817,36 @@ var auth = {
       state.role = userData.role;
       state.name = userData.name;
       state.id = userData.id;
+    },
+    logout: function logout(state) {
+      state.token = null;
+      state.role = null;
+      state.name = null;
+      state.id = null;
+      localStorage.removeItem('token');
+      localStorage.removeItem('userId');
+      localStorage.removeItem('localId');
+      localStorage.removeItem('name');
+      localStorage.removeItem('expirationDate');
     }
   },
   actions: {
-    signin: function signin(_ref, authData) {
-      var state = _ref.state,
-          commit = _ref.commit;
+    logout: function logout(_ref) {
+      var commit = _ref.commit;
+      commit('logout');
+      _router__WEBPACK_IMPORTED_MODULE_4__["default"].replace('/');
+    },
+    setLogouttimer: function setLogouttimer(_ref2, exTime) {
+      var commit = _ref2.commit;
+      console.log(exTime);
+      setTimeout(function () {
+        commit('logout');
+      }, exTime);
+    },
+    signin: function signin(_ref3, authData) {
+      var state = _ref3.state,
+          commit = _ref3.commit,
+          dispatch = _ref3.dispatch;
       _axios_auth__WEBPACK_IMPORTED_MODULE_2__["default"].post('/api/auth/login', {
         email: authData.email,
         password: authData.password
@@ -24728,9 +24854,10 @@ var auth = {
         commit('authUser', {
           token: res.data.token,
           role: res.data.role,
-          name: res.data.email,
+          name: res.data.name,
           id: res.data.id
         });
+        dispatch('setLogouttimer', res.data.expires_in * 1000);
         var now = new Date();
         var expirationDate = new Date(now.getTime() + res.data.expires_in * 1000);
         localStorage.setItem('token', res.data.token);
@@ -24752,8 +24879,8 @@ var auth = {
         return console.log(error);
       });
     },
-    signup: function signup(_ref2, authData) {
-      var commit = _ref2.commit;
+    signup: function signup(_ref4, authData) {
+      var commit = _ref4.commit;
       _axios_auth__WEBPACK_IMPORTED_MODULE_2__["default"].post('/api/auth/register', {
         name: authData.name,
         email: authData.email,
@@ -24767,16 +24894,17 @@ var auth = {
         return console.log(error);
       });
     },
-    tryAutoLogin: function tryAutoLogin(_ref3) {
-      var state = _ref3.state,
-          commit = _ref3.commit;
+    tryAutoLogin: function tryAutoLogin(_ref5) {
+      var state = _ref5.state,
+          commit = _ref5.commit,
+          dispatch = _ref5.dispatch;
       var token = localStorage.getItem('token');
       var role = localStorage.getItem('userId');
       var name = localStorage.getItem('name');
       var id = localStorage.getItem('localId');
 
       if (!token) {
-        return;
+        dispatch('logout');
       }
 
       var expirationDate = localStorage.getItem('expirationDate');
@@ -24803,9 +24931,9 @@ var auth = {
         return console.log(error);
       });
     },
-    fetchUser: function fetchUser(_ref4) {
-      var commit = _ref4.commit,
-          state = _ref4.state;
+    fetchUser: function fetchUser(_ref6) {
+      var commit = _ref6.commit,
+          state = _ref6.state;
       axios__WEBPACK_IMPORTED_MODULE_3___default.a.post('/api/auth/me' + '?token=' + state.token).then(function (res) {
         commit('authUser', {
           token: res.data.token,
@@ -24864,7 +24992,8 @@ var dosen = {
       prev_page_url: null,
       last_page: null,
       per_page: null,
-      path: null
+      path: null,
+      total: null
     },
     user: {
       name: null,
@@ -24887,6 +25016,7 @@ var dosen = {
       state.dosens = data.dosen; //pagination
 
       state.pagination.current_page = data.current_page, state.pagination.last_page_url = data.last_page_url, state.pagination.next_page_url = data.next_page_url, state.pagination.prev_page_url = data.prev_page_url, state.pagination.last_page = data.last_page, state.pagination.per_page = data.per_page, state.pagination.path = data.path;
+      state.pagination.total = data.total;
       state.display = data.display;
       state.user.name = null;
       state.user.email = null;
@@ -24900,7 +25030,7 @@ var dosen = {
     getDsn: function getDsn(state, data) {
       state.dosens = data.dosen; //pagination
 
-      state.pagination.current_page = data.current_page, state.pagination.last_page_url = data.last_page_url, state.pagination.next_page_url = data.next_page_url, state.pagination.prev_page_url = data.prev_page_url, state.pagination.last_page = data.last_page, state.pagination.per_page = data.per_page, state.pagination.path = data.path, state.display = 'none';
+      state.pagination.current_page = data.current_page, state.pagination.last_page_url = data.last_page_url, state.pagination.next_page_url = data.next_page_url, state.pagination.prev_page_url = data.prev_page_url, state.pagination.last_page = data.last_page, state.pagination.per_page = data.per_page, state.pagination.path = data.path, state.pagination.total = data.total, state.display = 'none';
     },
     error: function error(state, errors) {
       state.error.email = errors.name, state.error.email = errors.email, state.error.password = errors.password, state.error.password_confirmation = errors.password_confirmation;
@@ -24946,7 +25076,8 @@ var dosen = {
           prev_page_url: res.data.prev_page_url,
           last_page: res.data.last_page,
           per_page: res.data.per_page,
-          path: res.data.path
+          path: res.data.path,
+          total: res.data.total
         });
       })["catch"](function (error) {
         console.log(error);
@@ -25015,6 +25146,7 @@ var dosen = {
           last_page: res.data.last_page,
           per_page: res.data.per_page,
           path: res.data.path,
+          total: res.data.total,
           display: 'none'
         });
       })["catch"](function (error) {
@@ -25103,7 +25235,8 @@ var home = {
       prev_page_url: null,
       last_page: null,
       per_page: null,
-      path: null
+      path: null,
+      total: null
     }
   },
   mutations: {
@@ -25113,7 +25246,7 @@ var home = {
     storePresents: function storePresents(state, data) {
       state.presents = data.present; //pagination
 
-      state.pagination.current_page = data.current_page, state.pagination.last_page_url = data.last_page_url, state.pagination.next_page_url = data.next_page_url, state.pagination.prev_page_url = data.prev_page_url, state.pagination.last_page = data.last_page, state.pagination.per_page = data.per_page, state.pagination.path = data.path;
+      state.pagination.current_page = data.current_page, state.pagination.last_page_url = data.last_page_url, state.pagination.next_page_url = data.next_page_url, state.pagination.prev_page_url = data.prev_page_url, state.pagination.last_page = data.last_page, state.pagination.per_page = data.per_page, state.pagination.path = data.path, state.pagination.total = data.total;
     }
   },
   actions: {
@@ -25159,7 +25292,8 @@ var home = {
           prev_page_url: res.data.prev_page_url,
           last_page: res.data.last_page,
           per_page: res.data.per_page,
-          path: res.data.path
+          path: res.data.path,
+          total: res.data.total
         });
       })["catch"](function (error) {
         console.log(error);
@@ -25216,7 +25350,8 @@ var mahasiswa = {
       prev_page_url: null,
       last_page: null,
       per_page: null,
-      path: null
+      path: null,
+      total: null
     },
     user: {
       name: null,
@@ -25236,7 +25371,7 @@ var mahasiswa = {
     storeMhs: function storeMhs(state, data) {
       state.mahasiswas = data.mahasiswa; //pagination
 
-      state.pagination.current_page = data.current_page, state.pagination.last_page_url = data.last_page_url, state.pagination.next_page_url = data.next_page_url, state.pagination.prev_page_url = data.prev_page_url, state.pagination.last_page = data.last_page, state.pagination.per_page = data.per_page, state.pagination.path = data.path;
+      state.pagination.current_page = data.current_page, state.pagination.last_page_url = data.last_page_url, state.pagination.next_page_url = data.next_page_url, state.pagination.prev_page_url = data.prev_page_url, state.pagination.last_page = data.last_page, state.pagination.per_page = data.per_page, state.pagination.path = data.path, state.pagination.total = data.total;
       state.display = data.display;
       state.user.name = null;
       state.user.email = null;
@@ -25250,7 +25385,7 @@ var mahasiswa = {
     getMhs: function getMhs(state, data) {
       state.mahasiswas = data.mahasiswa; //pagination
 
-      state.pagination.current_page = data.current_page, state.pagination.last_page_url = data.last_page_url, state.pagination.next_page_url = data.next_page_url, state.pagination.prev_page_url = data.prev_page_url, state.pagination.last_page = data.last_page, state.pagination.per_page = data.per_page, state.pagination.path = data.path;
+      state.pagination.current_page = data.current_page, state.pagination.last_page_url = data.last_page_url, state.pagination.next_page_url = data.next_page_url, state.pagination.prev_page_url = data.prev_page_url, state.pagination.last_page = data.last_page, state.pagination.per_page = data.per_page, state.pagination.path = data.path, state.pagination.total = data.total;
     },
     error: function error(state, errors) {
       state.error.email = errors.name, state.error.email = errors.email, state.error.password = errors.password, state.error.password_confirmation = errors.password_confirmation;
@@ -25326,7 +25461,8 @@ var mahasiswa = {
           prev_page_url: res.data.prev_page_url,
           last_page: res.data.last_page,
           per_page: res.data.per_page,
-          path: res.data.path
+          path: res.data.path,
+          total: res.data.total
         });
       })["catch"](function (error) {
         console.log(error);
@@ -25335,6 +25471,7 @@ var mahasiswa = {
     mhsStore: function mhsStore(_ref5, param) {
       var state = _ref5.state,
           commit = _ref5.commit;
+      var token = localStorage.getItem('token');
       Object(_axios_auth__WEBPACK_IMPORTED_MODULE_2__["default"])({
         url: '/api/auth/register',
         method: 'POST',
@@ -25347,7 +25484,8 @@ var mahasiswa = {
         },
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json'
+          'Accept': 'application/json',
+          Authorization: 'Bearer ' + token
         }
       }).then(function (res) {
         commit('storeMhs', {
@@ -25360,6 +25498,7 @@ var mahasiswa = {
           last_page: res.data.last_page,
           per_page: res.data.per_page,
           path: res.data.path,
+          total: res.data.total,
           display: 'none'
         });
       })["catch"](function (error) {
@@ -25427,7 +25566,8 @@ var matkul = {
       prev_page_url: null,
       last_page: null,
       per_page: null,
-      path: null
+      path: null,
+      total: null
     },
     display: 'none',
     matkul: {
@@ -25440,7 +25580,7 @@ var matkul = {
     getMatkul: function getMatkul(state, data) {
       state.matkuls = data.matkul; //pagination
 
-      state.pagination.current_page = data.current_page, state.pagination.last_page_url = data.last_page_url, state.pagination.next_page_url = data.next_page_url, state.pagination.prev_page_url = data.prev_page_url, state.pagination.last_page = data.last_page, state.pagination.per_page = data.per_page, state.pagination.path = data.path;
+      state.pagination.current_page = data.current_page, state.pagination.last_page_url = data.last_page_url, state.pagination.next_page_url = data.next_page_url, state.pagination.prev_page_url = data.prev_page_url, state.pagination.last_page = data.last_page, state.pagination.per_page = data.per_page, state.pagination.path = data.path, state.pagination.total = data.total;
     },
     show: function show(state, data) {
       state.display = data.display;
@@ -25501,6 +25641,7 @@ var matkul = {
     adminMtklStore: function adminMtklStore(_ref4, param) {
       var commit = _ref4.commit,
           dispatch = _ref4.dispatch;
+      var token = localStorage.getItem('token');
       Object(_axios_auth__WEBPACK_IMPORTED_MODULE_2__["default"])({
         url: '/api/matkul/create',
         method: 'POST',
@@ -25510,7 +25651,8 @@ var matkul = {
         },
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json'
+          'Accept': 'application/json',
+          Authorization: 'Bearer ' + token
         }
       }).then(function (res) {
         dispatch('adminResetMatkul');
@@ -25536,7 +25678,7 @@ var matkul = {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          Authorization: 'Bearer ' + this.token
+          Authorization: 'Bearer ' + token
         }
       }).then(function (res) {
         commit('getMatkul', {
@@ -25548,7 +25690,8 @@ var matkul = {
           prev_page_url: res.data.prev_page_url,
           last_page: res.data.last_page,
           per_page: res.data.per_page,
-          path: res.data.path
+          path: res.data.path,
+          total: res.data.total
         });
       })["catch"](function (error) {
         console.log(error);

@@ -36,12 +36,10 @@
                     </div>
                     <div class="col-sm-6 clearfix">
                         <div class="user-profile pull-right ">
-                            <img class="avatar user-thumb" src="assets/images/author/avatar.png" alt="avatar">
+                            <img class="avatar user-thumb" src="../../../../public/assets/images/author/avatar.png" alt="avatar">
                             <h4 @click.prevent="data" class="user-name dropdown-toggle" data-toggle="dropdown" aria-expanded="true">{{name}}<i class="fa fa-angle-down"></i></h4>
                             <div class="dropdown-menu" :class="{show:show==true}" >
-                                <a class="dropdown-item" href="#">Message</a>
-                                <a class="dropdown-item" href="#">Settings</a>
-                                <a class="dropdown-item" href="#">Log Out</a>
+                                <a class="dropdown-item" @click.prevent="logout" href="javascript:void(0)">Log Out</a>
                             </div>
                         </div>
                     </div>
@@ -228,7 +226,7 @@
         <!-- footer area start-->
         <footer>
             <div class="footer-area">
-                <p>© Copyright 2018. All right reserved. Template by <a href="https://colorlib.com/wp/">Colorlib</a>.</p>
+                <p>Semoga Lebik Baik.</p>
             </div>
         </footer>
         <!-- footer area end-->
@@ -236,7 +234,7 @@
 </template>
 <script>
 import QrcodeVue from 'qrcode.vue'
-import axios from 'axios'
+import axios from '../../axios-auth'
 export default {
   data(){
     return {
@@ -248,22 +246,30 @@ export default {
       displayp   : 'none',
       value     : "",
       presentId   : null,
-      url   : null
+      url   : null,
+      key   : 0
     }
   },
   methods: {
+    logout(){
+        this.$store.dispatch('logout')
+    },
+
     data : function() {
       this.show = !this.show
     },
     gqr(){
-    this.value = 'http://192.168.43.184:8000/api/present'
-    this.value = this.value+'?mtkl_id='+this.matkul+'&prt='+this.prt
+    const defaultUrl =  axios.defaults.baseURL
+    this.value = defaultUrl+'api/present?mtkl_id='+this.matkul+'&prt='+this.prt+'&key=1'
+    setTimeout(()   =>  {
+        this.value = defaultUrl+'api/present?mtkl_id='+this.matkul+'&prt='+this.prt+'&key='+this.key
+    }, 8000)
     if (this.matkul &&  this.prt != "") {
         this.display = 'block'
         this.qr = !this.qr
     }
     },
-    showPresent(path){        
+    showPresent(path){                
         if (this.presentId != null && path == null) {
             path = '/api/present/'+this.presentId
             this.displayp = 'block'

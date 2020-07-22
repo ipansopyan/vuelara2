@@ -38,10 +38,14 @@ Route::group([
 
 Route::group(['middleware' => 'auth:api'], function(){  
     // admin
-    Route::group(['middleware' => 'admin'], function(){
+        Route::group(['middleware' => 'admin'], function(){
+        Route::get('dsn', 'DosenController@dosens');
+        Route::get('matkuls', 'MatkulController@index');
+        Route::get('dosenall', 'DosenController@dosenall');
+        Route::post('matkul/create', 'MatkulController@create');
+        Route::put('matkul/{matkul}', 'MatkulController@update');
+        Route::delete('matkul/{matkul}', 'MatkulController@destroy');
         Route::get('mhs','MahasiswaController@index');
-
-        // Route::get('dsn','UserController@dsn');
         Route::delete('user/{user}', 'MahasiswaController@destroy');
     });
     // route dsn
@@ -50,12 +54,8 @@ Route::group(['middleware' => 'auth:api'], function(){
         Route::get('present/{mtkl_id}', 'DosenController@show');
     });    
 });
-Route::get('dsn', 'DosenController@dosens');
-Route::get('matkuls', 'MatkulController@index');
-Route::get('dosenall', 'DosenController@dosenall');
-Route::post('matkul/create', 'MatkulController@create');
-Route::put('matkul/{matkul}', 'MatkulController@update');
-Route::delete('matkul/{matkul}', 'MatkulController@destroy');
+Route::get('presentall', 'DosenController@pall');
+
 
 
 

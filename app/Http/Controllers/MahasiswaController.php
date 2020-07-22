@@ -18,7 +18,7 @@ class MahasiswaController extends Controller
     {
         $mhs = User::where('role',1)
         ->orderBy('id','desc')
-        ->paginate(5);
+        ->paginate(10);
         return $mhs;
     }
     public function destroy(User $user)

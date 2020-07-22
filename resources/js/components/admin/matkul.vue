@@ -19,7 +19,7 @@
                     <form class="was-validated" @submit.prevent="onSubmit" method="post">
                     <div class="modal-body">
                         <div class="form-group">
-                            <input v-model="matkul.name" class="form-control form-control" type="text" placeholder="nama matakuliah">
+                            <input required v-model="matkul.name" class="form-control form-control" type="text" placeholder="nama matakuliah">
                         </div>
                         <div class="form-group">
                         <label class="col-form-label">Select</label>
@@ -49,7 +49,7 @@
                </tr>
            </thead>
             <tbody v-for="(matkul,index) in matkuls" :key="matkul.id">
-                <td>{{index+1}}</td>
+                <td>{{(pagination.current_page*pagination.per_page)-pagination.per_page + index+1}}</td>
                 <td>{{matkul.name_matkul}}</td>
                 <td>{{matkul.name}}</td>
                 <td>

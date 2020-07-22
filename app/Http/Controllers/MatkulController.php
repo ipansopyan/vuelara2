@@ -20,7 +20,7 @@ class MatkulController extends Controller
         $matkuls = DB::table('matkuls')->join('users','matkuls.user_id' ,'=','users.id')
         ->select('matkuls.*','users.name')
         ->orderBy('id','desc')
-        ->paginate(1);
+        ->paginate(10);
         return $matkuls; 
     }
     public function create(Request $request)

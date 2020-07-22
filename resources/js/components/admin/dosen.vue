@@ -5,7 +5,7 @@
   <div class="col-12 mt-5">
    <div class="card">
     <div class="card-body">
-     <h4 class="header-title">Data {{display}}</h4>
+     <h4 class="header-title">Data Dosen</h4>
      <div class="d-flex justify-content-end">
          <button class="btn btn-xs btn-primary" @click.prevent="showModal">add</button>
      </div>
@@ -55,7 +55,7 @@
                </tr>
            </thead>
             <tbody v-for="(dosen, index) in dosens" :key="dosen.id">
-              <td>{{index+1}}</td>
+              <td>{{(pagination.current_page*pagination.per_page)-pagination.per_page + index+1}}</td>
               <td>{{dosen.name}}</td>
               <td>{{dosen.email}}</td>
               <td><a href="javascript:void(0)" @click.prevent="onDelete(dosen.id)" class="text-danger"><i class="ti-trash"></i></a></td>

@@ -7,13 +7,13 @@
                         <router-link :to="{name:'dashboard'}"><i class="ti-dashboard"></i><span>Dashboard</span></router-link>
                     </li>
                     <li>
-                        <router-link :to="{name:'admin/mahasiswa'}"><i class="ti-dashboard"></i><span>Mahasiswa</span></router-link>
+                        <router-link :to="{name:'admin/mahasiswa'}"><i class="ti-user"></i><span>Mahasiswa</span></router-link>
                     </li>
                     <li>
-                        <router-link :to="{name:'admin/dosen'}"><i class="ti-dashboard"></i><span>Dosen</span></router-link>
+                        <router-link :to="{name:'admin/dosen'}"><i class="ti-user"></i><span>Dosen</span></router-link>
                     </li>
                     <li>
-                        <router-link :to="{name:'admin/matkul'}"><i class="ti-dashboard"></i><span>Mata Kuliah</span></router-link>
+                        <router-link :to="{name:'admin/matkul'}"><i class="ti-book"></i><span>Mata Kuliah</span></router-link>
                     </li>
                 </ul>
             </nav>
